@@ -3,6 +3,8 @@ from flask_restful import Resource, Api, reqparse
 import pandas as pd
 import ast
 from main import Diploma
+import pathlib
+from mail_sender import sendMail
 app = Flask(__name__)
 api = Api(app)
 
@@ -23,8 +25,20 @@ class DiplomaAPI(Resource):
         diploma = Diploma(str(args['diplomaGenerar'])+".html",str(args['nombreDiploma'])+".pdf",args['name']
         ,args['course'],args['score'],args['date']) 
        
+
+
+
         if diploma.generate():
-            return {'status':"Diploma generado correctamente"
+            
+            path = str(pathlib.Path().resolve())
+            sendMail( 
+            "diplomaapiinnosoft@gmail.com",
+            ["diplomaapiinnosoft@gmail.com"],
+            "Certificación" + args['course'],
+            "Mail generado automaticamente",
+            [path+"\\"+args['nombreDiploma']+".pdf"]
+            )            
+            return {'status':"Diploma generado correctamente.Mail Enviado"
             
             
             }, 200  # return data with 200 OK

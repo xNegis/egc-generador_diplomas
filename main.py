@@ -13,7 +13,7 @@ class Diploma:
     self.date = _date
   
   def generate(self):
-    env = Environment(loader=FileSystemLoader("egc-generador_diplomas/plantillas"))
+    env = Environment(loader=FileSystemLoader("./plantillas"))
     template=env.get_template(self.diploma_a_generar)
     usuario ={
         
@@ -35,7 +35,7 @@ class Diploma:
     }
 
     path = pathlib.Path().resolve() 
-    path_wkhtmltopdf = str(path)+ "\egc-generador_diplomas\wkhtmltopdf.exe"
+    path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
 
     config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
     print("Generando diploma de la plantilla '" +self.diploma_a_generar+"'")
@@ -43,6 +43,3 @@ class Diploma:
     print("Diploma generado correctamente")
     return True
 
-   
-# diploma = Diploma("diploma_ctf.html","prueba 1.pdf","antonio","4","2","hoy")
-# diploma.generate()

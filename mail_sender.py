@@ -1,48 +1,38 @@
-import smtplib  
+from email.mime.base import MIMEBase
+import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+from email.utils import COMMASPACE, formatdate
+from email import encoders
+import os
 import pathlib
-import codecs
+PASSWORD = "Innosoft"
 
-msg = MIMEMultipart()
-path = str(pathlib.Path().resolve())
-msg.attach(MIMEText(open(path+"\prueba2.pdf",errors='ignore').read()))
+def sendMail(fromUser,to, subject, text, files=[]):
+    assert type(to)==list
+    assert type(files)==list
 
-mailer = smtplib.SMTP()
-mailer.connect()
-mailer.sendmail("xnegis@gmail.com", "xnegis@gmail.com", msg.as_string())
-mailer.close()
+    msg = MIMEMultipart()
+    msg['From'] = fromUser
+    msg['To'] = COMMASPACE.join(to)
+    msg['Date'] = formatdate(localtime=True)
+    msg['Subject'] = subject
 
-def send_email_pdf_figs(path_to_pdf, subject, message, destination, password_path=None):
-    from socket import gethostname
-    from email.mime.application import MIMEApplication
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-    import smtplib
-    import json
+    msg.attach( MIMEText(text) )
 
-    my_mail = 'diplomaapiinnosoft@gmail.com'
-    server = smtplib.SMTP('smtp.gmail.com', 587)
+    for file in files:
+        part = MIMEBase('application', "octet-stream")
+        part.set_payload( open(file,"rb").read() )
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename="%s"'
+                       % os.path.basename(file))
+        msg.attach(part)
+
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.ehlo_or_helo_if_needed()
     server.starttls()
-    with open(password_path) as f:
-        config = json.load(f)
-        server.login(my_mail, "Innosoft")
-        # Craft message (obj)
-        msg = MIMEMultipart()
-
-        message = f'{message}\nSend from Hostname: {gethostname()}'
-        msg['Subject'] = subject
-        msg['From'] = my_mail
-        msg['To'] = destination
-        # Insert the text to the msg going by e-mail
-        msg.attach(MIMEText(message, "plain"))
-        # Attach the pdf to the msg going by e-mail
-        with open(path_to_pdf, "rb") as f:
-            attach = MIMEApplication(f.read(),_subtype="pdf")
-        attach.add_header('Content-Disposition','attachment',filename=str(path_to_pdf))
-        msg.attach(attach)
-        # send msg
-        server.send_message(msg)
-
-send_email_pdf_figs(str(pathlib.Path().resolve())+"\prueba2.pdf","xfa","funciona","diplomaapiinnosoft@gmail.com")
+    server.ehlo_or_helo_if_needed()
+    server.login(fromUser,PASSWORD)
+    server.sendmail(fromUser, to, msg.as_string())
+    server.quit()

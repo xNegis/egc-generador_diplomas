@@ -1,12 +1,18 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+import pandas as pd
 import ast
 from main import Diploma
 import pathlib
+import os.path
 from mail_sender import sendMail
 app = Flask(__name__)
 api = Api(app)
 
+CURRENTPATH = str(pathlib.Path().resolve())
+PATHPLANTILLAS = CURRENTPATH+"/plantillas"
+MAILFROM ="diplomaapiinnosoft@gmail.com"
+MAILTO ="diplomaapiinnosoft@gmail.com" 
 
 class DiplomaAPI(Resource):
     def post(self):
@@ -21,23 +27,27 @@ class DiplomaAPI(Resource):
         
         args = parser.parse_args()  # parse arguments to dictionary
         
-        diploma = Diploma(str(args['diplomaGenerar'])+".html",str(args['nombreDiploma'])+".pdf",args['name']
+        diploma_a_generar = str(args['diplomaGenerar'])+".html"
+
+        if not os.path.exists(PATHPLANTILLAS+"/"+diploma_a_generar):
+            return {'Diploma Incorrecto':"El diploma '"+diploma_a_generar+"' no existe"}, 500 
+
+        diploma = Diploma(diploma_a_generar,str(args['nombreDiploma'])+".pdf",args['name']
         ,args['course'],args['score'],args['date']) 
        
 
-
+        
 
         if diploma.generate():
             
-            path = str(pathlib.Path().resolve())
             sendMail( 
             "diplomaapiinnosoft@gmail.com",
             ["diplomaapiinnosoft@gmail.com"],
-            "Certificación" + args['course'],
+            "Certificación " + args['course'],
             "Mail generado automaticamente",
-            [path+"\\"+args['nombreDiploma']+".pdf"]
+            [CURRENTPATH+"\\"+args['nombreDiploma']+".pdf"]
             )            
-            return {'status':"Diploma generado correctamente.Mail Enviado"
+            return {'status':"Diploma generado correctamente.Mail enviado a '"+MAILTO+"'"
             
             
             }, 200  # return data with 200 OK

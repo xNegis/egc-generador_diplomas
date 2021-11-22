@@ -43,5 +43,5 @@ class Diploma:
     print("Diploma generado correctamente")
     return True
 
-diploma = Diploma("diploma_mayor_participacion.html","prueba 3.pdf","antonio","3","56","27/03/03")
-diploma.generate()
+# diploma = Diploma("diploma_ctf.html","prueba 1.pdf","antonio","4","2","hoy")
+# diploma.generate()

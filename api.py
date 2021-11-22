@@ -12,7 +12,6 @@ api = Api(app)
 CURRENTPATH = str(pathlib.Path().resolve())
 PATHPLANTILLAS = CURRENTPATH+"/plantillas"
 MAILFROM ="diplomaapiinnosoft@gmail.com"
-MAILTO ="diplomaapiinnosoft@gmail.com" 
 
 class DiplomaAPI(Resource):
     def post(self):
@@ -24,9 +23,14 @@ class DiplomaAPI(Resource):
         parser.add_argument('course', required=True)
         parser.add_argument('score', required=True)
         parser.add_argument('date', required=True)
+        parser.add_argument('mailto', required=True)
+        
         
         args = parser.parse_args()  # parse arguments to dictionary
         
+        
+        mailto = str(args['mailto'])
+
         diploma_a_generar = str(args['diplomaGenerar'])+".html"
 
         if not os.path.exists(PATHPLANTILLAS+"/"+diploma_a_generar):
@@ -35,6 +39,7 @@ class DiplomaAPI(Resource):
         diploma = Diploma(diploma_a_generar,str(args['nombreDiploma'])+".pdf",args['name']
         ,args['course'],args['score'],args['date']) 
        
+       
 
         
 
@@ -42,12 +47,12 @@ class DiplomaAPI(Resource):
             
             sendMail( 
             "diplomaapiinnosoft@gmail.com",
-            ["diplomaapiinnosoft@gmail.com"],
+            [mailto],
             "Certificación " + args['course'],
             "Mail generado automaticamente",
             [CURRENTPATH+"\\"+args['nombreDiploma']+".pdf"]
             )            
-            return {'status':"Diploma generado correctamente.Mail enviado a '"+MAILTO+"'"
+            return {'status':"Diploma generado correctamente.Mail enviado a '"+mailto+"'"
             
             
             }, 200  # return data with 200 OK

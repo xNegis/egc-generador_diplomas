@@ -31,7 +31,7 @@ class Diploma:
     'margin-right':'0.1in',
     'margin-bottom':'0.1in',
     'margin-left':'0.1in',
-    'encoding': "base64",
+    'encoding': "UTF-8",
     }
 
     path = pathlib.Path().resolve() 
@@ -43,3 +43,5 @@ class Diploma:
     print("Diploma generado correctamente")
     return True
 
+diploma = Diploma("diploma_mayor_participacion.html","prueba 3.pdf","antonio","3","56","27/03/03")
+diploma.generate()

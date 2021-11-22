@@ -1,7 +1,7 @@
 import pdfkit 
 import pathlib
 from jinja2 import Environment, FileSystemLoader
-env = Environment(loader=FileSystemLoader("plantillas"))
+env = Environment(loader=FileSystemLoader("egc-generador_diplomas/plantillas"))
 template=env.get_template("diploma_ctf.html")
 usuario ={
     
@@ -23,7 +23,7 @@ options = {
 }
 
 path = pathlib.Path().resolve() 
-path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
+path_wkhtmltopdf = str(path)+ "\egc-generador_diplomas\wkhtmltopdf.exe"
 
 config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 pdfkit.from_string(html,'nuevo_pdf4.pdf',options=options,configuration=config)

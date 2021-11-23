@@ -1,5 +1,6 @@
 import pdfkit 
 import pathlib
+import platform
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -35,8 +36,12 @@ class Diploma:
     }
 
     path = pathlib.Path().resolve() 
-    path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
-
+    plataforma = platform.system()
+    if plataforma == "Windows":
+      path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
+    elif plataforma == "Linux":
+      path_wkhtmltopdf = str(path) + "\wkhtmltox_0.12.6-1.focal_amd64.deb"
+      
     config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
     print("Generando diploma de la plantilla '" +self.diploma_a_generar+"'")
     pdfkit.from_string(html,self.nombre_diploma,options=options,configuration=config)

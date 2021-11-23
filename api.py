@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-import pandas as pd
-import ast
 from main import Diploma
 import pathlib
 import os.path
@@ -50,7 +48,7 @@ class DiplomaAPI(Resource):
             [mailto],
             "Certificación " + args['course'],
             "Mail generado automaticamente",
-            [CURRENTPATH+"\\"+args['nombreDiploma']+".pdf"]
+            [CURRENTPATH+"/"+args['nombreDiploma']+".pdf"]
             )            
             return {'status':"Diploma generado correctamente.Mail enviado a '"+mailto+"'"
             

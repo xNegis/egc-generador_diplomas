@@ -35,18 +35,18 @@ class Diploma:
     'encoding': "UTF-8",
     }
 
-    path = pathlib.Path().resolve() 
-    plataforma = platform.system()
-    if plataforma == "Windows":
-      path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
-    elif plataforma == "Linux":
-      path_wkhtmltopdf = str(path) + "\wkhtmltox_0.12.6-1.focal_amd64.deb"
+    # path = pathlib.Path().resolve() 
+    # plataforma = platform.system()
+    # if plataforma == "Windows":
+    #   path_wkhtmltopdf = str(path)+ "\wkhtmltopdf.exe"
+    # elif plataforma == "Linux":
+    #   path_wkhtmltopdf = str(path) + "\wkhtmltox_0.12.6-1.focal_amd64.deb"
       
-    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    #config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
     print("Generando diploma de la plantilla '" +self.diploma_a_generar+"'")
-    pdfkit.from_string(html,self.nombre_diploma,options=options,configuration=config)
+    pdfkit.from_string(html,self.nombre_diploma,options=options)
     print("Diploma generado correctamente")
     return True
 
-# diploma = Diploma("diploma_ctf.html","prueba 1.pdf","antonio","4","2","hoy")
-# diploma.generate()
+diploma = Diploma("diploma_ctf.html","prueba 1.pdf","antonio","4","2","hoy")
+diploma.generate()

@@ -12,7 +12,7 @@ PATHPLANTILLAS = CURRENTPATH+"/plantillas"
 MAILFROM ="diplomaapiinnosoft@gmail.com"
 
 class DiplomaAPI(Resource):
-    def post(self):
+    def get(self):
         parser = reqparse.RequestParser()  # initialize
         
         parser.add_argument('diplomaGenerar', required=True)  

@@ -12,12 +12,6 @@ PATHPLANTILLAS = CURRENTPATH+"/plantillas"
 MAILFROM ="diplomaapiinnosoft@gmail.com"
 
 
-
-
-class HelloWorld(Resource):
-    def get(self):
-        return "Hello world!"
-
 class DiplomaAPI(Resource):
     def get(self):
         parser = reqparse.RequestParser()  # initialize
@@ -69,7 +63,7 @@ class DiplomaAPI(Resource):
         
 
 api.add_resource(DiplomaAPI, '/diploma')  
-api.add_resource(HelloWorld, '/')  
+ 
 
 
 if __name__ == '__main__':

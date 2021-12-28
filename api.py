@@ -2,13 +2,13 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from main import Diploma
 import pathlib
-import os.path
+#import os.path
 from mail_sender import sendMail
 app = Flask(__name__)
 api = Api(app)
 
 CURRENTPATH = str(pathlib.Path().resolve())
-PATHPLANTILLAS = CURRENTPATH+"/plantillas"
+#PATHPLANTILLAS = CURRENTPATH+"/plantillas"
 MAILFROM ="diplomaapiinnosoft@gmail.com"
 
 
@@ -30,11 +30,16 @@ class DiplomaAPI(Resource):
         
         mailto = str(args['mailto'])
 
-        diploma_a_generar = str(args['diplomaGenerar'])+".html"
+        # ----------- Si se quiere usar el directorio de plantillas de la api ------------
+        #diploma_a_generar = str(args['diplomaGenerar'])+".html"
 
-        if not os.path.exists(PATHPLANTILLAS+"/"+diploma_a_generar):
-            return {'Diploma Incorrecto':"El diploma '"+diploma_a_generar+"' no existe"}, 500 
+        #if not os.path.exists(PATHPLANTILLAS+"/"+diploma_a_generar):
+        #    return {'Diploma Incorrecto':"El diploma '"+diploma_a_generar+"' no existe"}, 500 
 
+        # ----------- Si se quiere dar la plantilla como parámetro de la petición ------------
+        diploma_a_generar = str(args['diplomaGenerar'])
+        # -----------
+        
         diploma = Diploma(diploma_a_generar,str(args['nombreDiploma'])+".pdf",args['name']
         ,args['course'],args['score'],args['date']) 
        

@@ -52,7 +52,7 @@ class Diploma:
     print("Generando diploma de la plantilla ...")
     pdfkit.from_string(html,self.nombre_diploma,options=options)
     print("Diploma generado correctamente")
-    return True
+    return html
 
 #----Html de la plantilla a usar----
 html = """<!DOCTYPE html>
@@ -107,3 +107,4 @@ html = """<!DOCTYPE html>
 </html>"""
 diploma = Diploma(html,"prueba 1.pdf","Alejandro Ruiz","Comité de Programa","2","XI Edición Innosoft 2021")
 diploma.generate()
+

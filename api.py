@@ -1,34 +1,38 @@
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-from main import Diploma
-import pathlib
-#import os.path
-from mail_sender import sendMail
-app = Flask(__name__)
-api = Api(app)
 
-CURRENTPATH = str(pathlib.Path().resolve())
+# app.py
+from flask import Flask, request, jsonify
+import pathlib
+import os.path
+from main import Diploma
+from mail_sender import sendMail
+from flask_talisman import Talisman
+
+
+app = Flask(__name__)
+Talisman(app,force_https=False)
 #PATHPLANTILLAS = CURRENTPATH+"/plantillas"
 MAILFROM ="diplomaapiinnosoft@gmail.com"
 
 
-class DiplomaAPI(Resource):
-    def get(self):
-        parser = reqparse.RequestParser()  # initialize
+@app.route('/diploma', methods=['GET'])
+def respond():
+        CURRENTPATH = str(pathlib.Path().resolve())
+        PATHPLANTILLAS = CURRENTPATH+"/plantillas"
+        MAILFROM ="diplomaapiinnosoft@gmail.com"
+
         
-        parser.add_argument('diplomaGenerar', required=True)  
-        parser.add_argument('nombreDiploma', required=True)
-        parser.add_argument('name', required=True)  
-        parser.add_argument('course', required=True)
-        parser.add_argument('score', required=True)
-        parser.add_argument('date', required=True)
-        parser.add_argument('mailto', required=True)
+        # Retrieve the name from url parameter
+        diplomaGenerar = str(request.args.get("diplomaGenerar", None))
+        nombreDiploma = str(request.args.get("nombreDiploma", None))
+        name = str(request.args.get("name", None))
+        course = str(request.args.get("course", None))
+        score = str(request.args.get("score", None))
+        date = str(request.args.get("date", None))
+        mailto = str(request.args.get("mailto", None))
         
         
-        args = parser.parse_args()  # parse arguments to dictionary
         
         
-        mailto = str(args['mailto'])
 
         # ----------- Si se quiere usar el directorio de plantillas de la api ------------
         #diploma_a_generar = str(args['diplomaGenerar'])+".html"
@@ -37,11 +41,11 @@ class DiplomaAPI(Resource):
         #    return {'Diploma Incorrecto':"El diploma '"+diploma_a_generar+"' no existe"}, 500 
 
         # ----------- Si se quiere dar la plantilla como parámetro de la petición ------------
-        diploma_a_generar = str(args['diplomaGenerar'])
+        diploma_a_generar = str(diplomaGenerar)
         # -----------
         
-        diploma = Diploma(diploma_a_generar,str(args['nombreDiploma'])+".pdf",args['name']
-        ,args['course'],args['score'],args['date']) 
+        diploma = Diploma(diploma_a_generar,str(nombreDiploma)+".pdf",name
+        ,course,score,date) 
        
        
 
@@ -52,9 +56,9 @@ class DiplomaAPI(Resource):
             sendMail( 
             "diplomaapiinnosoft@gmail.com",
             [mailto],
-            "Certificación " + args['course'],
+            "Certificación " + course,
             "Mail generado automaticamente",
-            [CURRENTPATH+"/"+args['nombreDiploma']+".pdf"]
+            [CURRENTPATH+"/"+nombreDiploma+".pdf"]
             )            
             return {'status':"Diploma generado correctamente.Mail enviado a '"+mailto+"'"
             
@@ -67,9 +71,13 @@ class DiplomaAPI(Resource):
             }, 500 
         
 
-api.add_resource(DiplomaAPI, '/diploma')  
- 
-
+@app.route('/')
+def index():
+    return  {'status':"Fallo del servidor al generar diploma"
+            
+            
+            }, 200 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)

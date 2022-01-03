@@ -44,7 +44,7 @@ def respond():
         diploma_a_generar = str(diplomaGenerar)
         # -----------
         
-        diploma = Diploma(diploma_a_generar,str(diplomaGenerar)+".pdf",name
+        diploma = Diploma(diploma_a_generar,str(nombreDiploma)+".pdf",name
         ,course,score,date) 
        
        

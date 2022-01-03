@@ -79,3 +79,4 @@ wrapt==1.13.3
 wsproto==1.0.0
 zipp==3.6.0
 zopfli==0.1.9
+wkhtmltopdf-pack-ng==0.12.3.0

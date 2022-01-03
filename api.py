@@ -1,6 +1,6 @@
 
 # app.py
-from flask import Flask, request, jsonify, reqparse
+from flask import Flask, request, jsonify
 import pathlib
 import os.path
 from main import Diploma
@@ -20,21 +20,19 @@ def respond():
         PATHPLANTILLAS = CURRENTPATH+"/plantillas"
         MAILFROM ="diplomaapiinnosoft@gmail.com"
 
-        parser = reqparse.RequestParser()  # initialize
         
-        parser.add_argument('diplomaGenerar', required=True)  
-        parser.add_argument('nombreDiploma', required=True)
-        parser.add_argument('name', required=True)  
-        parser.add_argument('course', required=True)
-        parser.add_argument('score', required=True)
-        parser.add_argument('date', required=True)
-        parser.add_argument('mailto', required=True)
-        
-        
-        args = parser.parse_args()  # parse arguments to dictionary
+        # Retrieve the name from url parameter
+        diplomaGenerar = str(request.args.get("diplomaGenerar", None))
+        nombreDiploma = str(request.args.get("nombreDiploma", None))
+        name = str(request.args.get("name", None))
+        course = str(request.args.get("course", None))
+        score = str(request.args.get("score", None))
+        date = str(request.args.get("date", None))
+        mailto = str(request.args.get("mailto", None))
         
         
-        mailto = str(args['mailto'])
+        
+        
 
         # ----------- Si se quiere usar el directorio de plantillas de la api ------------
         #diploma_a_generar = str(args['diplomaGenerar'])+".html"
@@ -43,11 +41,11 @@ def respond():
         #    return {'Diploma Incorrecto':"El diploma '"+diploma_a_generar+"' no existe"}, 500 
 
         # ----------- Si se quiere dar la plantilla como parámetro de la petición ------------
-        diploma_a_generar = str(args['diplomaGenerar'])
+        diploma_a_generar = str(diplomaGenerar)
         # -----------
         
-        diploma = Diploma(diploma_a_generar,str(args['nombreDiploma'])+".pdf",args['name']
-        ,args['course'],args['score'],args['date']) 
+        diploma = Diploma(diploma_a_generar,str(diplomaGenerar)+".pdf",name
+        ,course,score,date) 
        
        
 
@@ -58,9 +56,9 @@ def respond():
             sendMail( 
             "diplomaapiinnosoft@gmail.com",
             [mailto],
-            "Certificación " + args['course'],
+            "Certificación " + course,
             "Mail generado automaticamente",
-            [CURRENTPATH+"/"+args['nombreDiploma']+".pdf"]
+            [CURRENTPATH+"/"+nombreDiploma+".pdf"]
             )            
             return {'status':"Diploma generado correctamente.Mail enviado a '"+mailto+"'"
             
@@ -71,7 +69,6 @@ def respond():
             
             
             }, 500 
-        
         
 
 @app.route('/')

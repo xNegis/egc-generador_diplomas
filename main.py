@@ -54,7 +54,7 @@ class Diploma:
       
     #config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
     print("Generando diploma de la plantilla '" +self.diploma_a_generar+"'")
-    make_pdf_from_raw_html(html,self.nombre_diploma,options) 
+    make_pdf_from_raw_html(str(html),self.nombre_diploma,options) 
 
     print("Diploma generado correctamente")
     return True

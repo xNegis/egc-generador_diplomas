@@ -2,12 +2,8 @@ import pdfkit
 import pathlib
 import platform
 from jinja2 import Template#, Environment, FileSystemLoader
-import os
-import subprocess
-import pdfkit 
-import pathlib
-import platform
-from jinja2 import Environment, FileSystemLoader
+
+
 class Diploma:
   def __init__(self, _diploma_a_generar, _nombre_diploma,_nombre_alumno,_course,_score,_date):
     self.diploma_a_generar=_diploma_a_generar
@@ -53,11 +49,10 @@ class Diploma:
     #   path_wkhtmltopdf = str(path) + "\wkhtmltox_0.12.6-1.focal_amd64.deb"
       
     #config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-    print("Generando diploma de la plantilla '" +self.diploma_a_generar+"'")
-    make_pdf_from_raw_html(html,self.nombre_diploma,options) 
-
+    print("Generando diploma de la plantilla ...")
+    pdfkit.from_string(html,self.nombre_diploma,options=options)
     print("Diploma generado correctamente")
-    return True
+    return html
 
 #----Html de la plantilla a usar----
 html = """<!DOCTYPE html>
@@ -110,47 +105,6 @@ html = """<!DOCTYPE html>
     </div>
 </body>
 </html>"""
-# diploma = Diploma(html,"prueba 1.pdf","Alejandro Ruiz","Comité de Programa","2","XI Edición Innosoft 2021")
-# diploma.generate()
+diploma = Diploma(html,"prueba 1.pdf","Alejandro Ruiz","Comité de Programa","2","XI Edición Innosoft 2021")
+diploma.generate()
 
-def _get_pdfkit_config():
-  """wkhtmltopdf lives and functions differently depending on Windows or Linux. We
-      need to support both since we develop on windows but deploy on Heroku.
-     Returns:
-         A pdfkit configuration
-     """
-  if 'DYNO' in os.environ:
-    print ('loading wkhtmltopdf path on heroku')
-    WKHTMLTOPDF_CMD = subprocess.Popen(
-        ['which', os.environ.get('WKHTMLTOPDF_BINARY', 'wkhtmltopdf-pack')], # Note we default to 'wkhtmltopdf' as the binary name
-        stdout=subprocess.PIPE).communicate()[0].strip()
-
-    return pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
-
-  else:
-      print ('loading wkhtmltopdf path on localhost')
-      MYDIR = os.path.dirname(__file__)    
-      WKHTMLTOPDF_CMD = os.path.join(MYDIR + "/static/executables/bin/", "wkhtmltopdf.exe")
-      return pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
-
-def make_pdf_from_url(url,path, options=None):
-    """Produces a pdf from a website's url.
-    Args:
-        url (str): A valid url
-        options (dict, optional): for specifying pdf parameters like landscape
-            mode and margins
-    Returns:
-        pdf of the website
-    """
-    return pdfkit.from_url(url,path, configuration=_get_pdfkit_config(), options=options)
-
-def make_pdf_from_raw_html(html,path, options=None,css=None):
-    """Produces a pdf from raw html.
-    Args:
-        html (str): Valid html
-        options (dict, optional): for specifying pdf parameters like landscape
-            mode and margins
-    Returns:
-        pdf of the supplied html
-    """
-    return pdfkit.from_string(html,path, configuration=_get_pdfkit_config(), options=options,css=css)

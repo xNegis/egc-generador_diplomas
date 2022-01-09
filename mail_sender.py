@@ -7,7 +7,7 @@ from email.utils import COMMASPACE, formatdate
 from email import encoders
 import os
 import pathlib
-PASSWORD = "Innosoft"
+PASSWORD = "Innosoft2021"
 
 def sendMail(fromUser,to, subject, text, files=[]):
     assert type(to)==list
@@ -33,6 +33,6 @@ def sendMail(fromUser,to, subject, text, files=[]):
     server.ehlo_or_helo_if_needed()
     server.starttls()
     server.ehlo_or_helo_if_needed()
-    server.login('diplomaapiinosoft@gmail.com',PASSWORD)
-    server.sendmail('diplomaapiinosoft@gmail.com', to, msg.as_string())
+    server.login("generadordiplomasinnosoft@gmail.com",PASSWORD)
+    server.sendmail("generadordiplomasinnosoft@gmail.com", to, msg.as_string())
     server.quit()

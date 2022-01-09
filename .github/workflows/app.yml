@@ -22,8 +22,6 @@ jobs:
         pip install -r requirements.txt
 
 
-
-
   deploy:
     runs-on: ubuntu-latest
     steps:

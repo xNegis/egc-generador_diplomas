@@ -5,11 +5,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import pathlib
 import unittest
+import platform
 
 PATH = str(pathlib.Path().resolve())
 OPTIONS = webdriver.ChromeOptions()
 OPTIONS.headless = True
-DRIVER = webdriver.Chrome(PATH+"/test/chromedriver",options=OPTIONS)
+plataforma = platform.system()
+if plataforma == "Windows":
+    DRIVER = webdriver.Chrome(executable_path=PATH+"/test/chromedriver.exe",options=OPTIONS)
+else:
+    DRIVER = webdriver.Chrome(executable_path=PATH+"/test/chromedriver",options=OPTIONS)
+
 URL_APP ="https://generador-diplomas-innosoft-2.herokuapp.com"
 
 class SeleniumTest(unittest.TestCase):

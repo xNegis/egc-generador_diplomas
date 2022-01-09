@@ -52,7 +52,34 @@ class SeleniumTest(unittest.TestCase):
 
         self.assertTrue("Diploma a Generar: " in DRIVER.find_element_by_tag_name('pre').text)
 
+    def test_generate_error_curso_vacio(self):
 
+        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba&name=Alejandro&course=&score=2&date=2020-02-02&mailto=fernandoclarosb@gmail.com")
+
+        self.assertTrue("Curso: " in DRIVER.find_element_by_tag_name('pre').text)
+        DRIVER.quit()
+
+
+    def test_generate_error_puntuacion_vacio(self):
+
+        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba&name=Alejandro&course=primero&score=&date=2020-02-02&mailto=fernandoclarosb@gmail.com")
+
+        self.assertTrue("no puede estar" in DRIVER.find_element_by_tag_name('pre').text)
+        DRIVER.quit()
+
+    def test_generate_error_fecha(self):
+
+        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba&name=Alejandro&course=2&score=2&date=soss&mailto=fernandoclarosb@gmail.com")
+
+        self.assertTrue("Fecha: " in DRIVER.find_element_by_tag_name('pre').text)
+        DRIVER.quit()
+
+    def test_generate_error_fecha_vacio(self):
+
+        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba&name=Alejandro&course=2&score=2&date=&mailto=fernandoclarosb@gmail.com")
+
+        self.assertTrue("no puede estar" in DRIVER.find_element_by_tag_name('pre').text)
+        DRIVER.quit()
 
 
 if __name__ == "main":

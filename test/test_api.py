@@ -42,7 +42,7 @@ class SeleniumTest(unittest.TestCase):
 
     def test_generate_error_nombre(self):
 
-        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba1&name=Alejandro%20Ruiz&course=Comité%20de%20Programa&score=2&date=2020-02-02&mailto=generadordiplomasinnosoft@gmail.com")
+        DRIVER.get(URL_APP+"/diploma?diplomaGenerar=wasd&nombreDiploma=prueba1&name=!!!!&course=Comité%20de%20Programa&score=2&date=2020-02-02&mailto=generadordiplomasinnosoft@gmail.com")
 
         self.assertTrue("Nombre: " in DRIVER.find_element_by_tag_name('pre').text)
 

@@ -33,6 +33,6 @@ def sendMail(fromUser,to, subject, text, files=[]):
     server.ehlo_or_helo_if_needed()
     server.starttls()
     server.ehlo_or_helo_if_needed()
-    server.login(fromUser,PASSWORD)
-    server.sendmail(fromUser, to, msg.as_string())
+    server.login('diplomaapiinosoft@gmail.com',PASSWORD)
+    server.sendmail('diplomaapiinosoft@gmail.com', to, msg.as_string())
     server.quit()

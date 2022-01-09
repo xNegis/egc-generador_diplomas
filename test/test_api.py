@@ -9,7 +9,7 @@ import unittest
 PATH = str(pathlib.Path().resolve())
 OPTIONS = webdriver.ChromeOptions()
 OPTIONS.headless = True
-DRIVER = webdriver.Chrome(PATH+"/test/chromedriver.exe",options=OPTIONS)
+DRIVER = webdriver.Chrome(PATH+"/test/chromedriver",options=OPTIONS)
 URL_APP ="https://generador-diplomas-innosoft-2.herokuapp.com"
 
 class SeleniumTest(unittest.TestCase):

@@ -9,12 +9,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 
-
-    
-    
-        
-    
-
 def test_api():
     options = webdriver.ChromeOptions()
     options.headless = True
